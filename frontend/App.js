@@ -1,15 +1,74 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, PermissionsAndroid, SafeAreaView, StyleSheet, Text, View } from "react-native";
+
+import LiveAudioStream, {Options} from 'react-native-live-audio-stream';
+
 
 export default function App() {
+  let record = () => {
+    const options = {
+      sampleRate: 16000, // default 44100
+      channels: 1, // 1 or 2, default 1
+      bitsPerSample: 16, // 8 or 16, default 16
+      audioSource: 6, // android only (see below)
+      bufferSize: 4096 * 2, // default is 2048
+      wavFile:''
+    }
+    
+    console.log(LiveAudioStream);
+    LiveAudioStream.init(options)
+    LiveAudioStream.on('data', data => {
+      console.log(data);
+      //base64-encoded audio data chunks
+    });
+    
+    
+    LiveAudioStream.start();
+    }
+
+  
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Open up App.jss to start working on your app!</Text>
       <StatusBar style="auto" />
+      <Button 
+        onPress={record}
+        title="recordbutton" ></Button>
+      <Button title="request permissions" onPress={requestMicrophonePermission} />
     </View>
   );
+  
+  
 }
+
+const requestMicrophonePermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        {
+          title: "Microphone usage",
+          message:
+           "Please accept for microphone usage",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      console.log(granted)
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("Permission granted")
+      } else {
+        console.log("Microphone permission denied");
+      }
+  } catch (err) {
+    console.warn(err);
+  }
+
+}
+
+  
 
 const styles = StyleSheet.create({
   container: {
