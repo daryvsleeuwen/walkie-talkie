@@ -15,10 +15,16 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-live-audio-stream": "^1.1.1",
     "react-native-microphone-stream": "github:chadsmith/react-native-microphone-stream",
+    "react-native-recording": "^0.5.1",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "~7.9.0",
+    "@types/jest": "^27.0.1",
+    "@types/react": "~16.9.35",
+    "@types/react-native": "~0.63.2",
+    "@types/react-test-renderer": "^17.0.1",
+    "typescript": "~4.0.0"
   },
   "private": true
 }
