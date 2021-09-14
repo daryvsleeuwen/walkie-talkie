@@ -18,12 +18,15 @@ export default function App() {
   
   LiveAudioStream.init(options);
   LiveAudioStream.on('data', data => {
-    console.log(data);
+    console.log("received audio packet");
     // base64-encoded audio data chunks
   });
   LiveAudioStream.start();
   }
 
+  let stop = () => {
+    LiveAudioStream.stop();
+  }
 
 
 
@@ -34,6 +37,9 @@ export default function App() {
       <Button
         title="record"
         onPress={record}></Button>
+        <Button
+        title="stop"
+        onPress={stop}></Button>
       <Button title="request permissions" onPress={requestMicrophonePermission} />
     </View>
   );
