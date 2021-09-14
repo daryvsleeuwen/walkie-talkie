@@ -5,20 +5,20 @@ import LiveAudioStream from 'react-native-live-audio-stream';
 import styles from '../styles/misc';
 
 let record = () => {
-    const options = {
-      sampleRate: 32000,
-      channels: 1,
-      bitsPerSample: 16,
-      audioSource: 6,
-      bufferSize: 4096,
-    };
-  
-    LiveAudioStream.init(options);
-    LiveAudioStream.on('data', (data) => {
-      console.log(data);
-    });
-    LiveAudioStream.start();
+  const options = {
+    sampleRate: 32000,
+    channels: 1,
+    bitsPerSample: 16,
+    audioSource: 6,
+    bufferSize: 4096,
   };
+
+  LiveAudioStream.init(options);
+  LiveAudioStream.on('data', (data) => {
+    console.log(data);
+  });
+  LiveAudioStream.start();
+};
 
 const requestMicrophonePermission = async () => {
   try {
@@ -36,10 +36,10 @@ const requestMicrophonePermission = async () => {
 
 export default function ChannelRoom() {
   return (
-    <View style={styles.container}></View>
+    <View style={styles.container}>
+      <Text>Channel Room</Text>
+    </View>
   );
 }
 
-const pageStyles = StyleSheet.create({
-
-});
+const pageStyles = StyleSheet.create({});
