@@ -9,6 +9,26 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
   },
+  
+  pageTitleBox: {
+    flexDirection: 'row',
+    marginBottom: 55
+  },
+
+  pageTitle: {
+    fontSize: 26,
+    color: '#272727',
+    fontWeight: 'bold'
+  },
+
+  button: {
+    borderRadius: 5,
+    padding: 14,
+    textAlign: 'center',
+    flex: 1,
+    color: '#ffffff',
+    backgroundColor: '#FF4848'
+  }
 });
 
 export default styles;

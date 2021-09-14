@@ -1,4 +1,4 @@
-import {StatusBar} from 'expo-status-bar';
+
 import React from 'react';
 import {PermissionsAndroid, StyleSheet, Text, View, Button} from 'react-native';
 import styles from '../styles/misc';
@@ -8,10 +8,13 @@ export default function ChannelSelector(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.pageTitleBox}>
+        <Text style={styles.pageTitle}>Select Channel</Text>
+      </View>
       <Button
-        title="Go to room"
+        title="Join Channel"
         onPress={() => {
-          navigate('Channel Room');
+          navigate('channel-room');
         }}></Button>
     </View>
   );
