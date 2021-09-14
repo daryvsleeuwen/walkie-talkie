@@ -13,6 +13,7 @@ MERGED from [:expo-splash-screen] /home/niels/School/Semester 7 (minor)/HybridWo
 MERGED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-15:12
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:2:1-13:12
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-37:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/niels/.gradle/caches/transforms-3/4a8afa75ba36a884751b261ed379b805/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -114,6 +115,8 @@ uses-permission#android.permission.INTERNET
 ADDED from /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/android/app/src/main/AndroidManifest.xml:3:3-64
 MERGED from [com.facebook.flipper:flipper:0.54.0] /home/niels/.gradle/caches/transforms-3/7ced98fae9ea2b5aa64e54aefef0d400/transformed/jetified-flipper-0.54.0/AndroidManifest.xml:15:5-67
 MERGED from [com.facebook.flipper:flipper:0.54.0] /home/niels/.gradle/caches/transforms-3/7ced98fae9ea2b5aa64e54aefef0d400/transformed/jetified-flipper-0.54.0/AndroidManifest.xml:15:5-67
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-67
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-67
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
 	android:name
@@ -258,6 +261,8 @@ MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor
 MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-10:41
@@ -422,6 +427,8 @@ INJECTED from /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie
 		INJECTED from /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/android/app/src/debug/AndroidManifest.xml
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.54.0] /home/niels/.gradle/caches/transforms-3/7ced98fae9ea2b5aa64e54aefef0d400/transformed/jetified-flipper-0.54.0/AndroidManifest.xml:16:5-76
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-76
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.54.0] /home/niels/.gradle/caches/transforms-3/7ced98fae9ea2b5aa64e54aefef0d400/transformed/jetified-flipper-0.54.0/AndroidManifest.xml:16:22-73
 meta-data#org.unimodules.core.AppLoader#react-native-headless
@@ -432,6 +439,8 @@ ADDED from [:unimodules-react-native-adapter] /home/niels/School/Semester 7 (min
 		ADDED from [:unimodules-react-native-adapter] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-79
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-79
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-79
+MERGED from [:react-native-socketio] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-socketio/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-79
 	android:name
 		ADDED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:22-76
 queries

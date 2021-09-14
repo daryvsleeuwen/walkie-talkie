@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Button,PermissionsAndroid , StyleSheet, Text, View } from 'react-native';
+//import { SOcket } from "react-native-socketio"
+import { io } from "socket.io-client";
 
 import LiveAudioStream from 'react-native-live-audio-stream';
 
@@ -28,6 +30,22 @@ export default function App() {
     LiveAudioStream.stop();
   }
 
+  let connect = () => {
+    var socketConfig = { path: '/' };
+
+    console.log('creating socket object...')
+    var socket = new io('http://localhost:3000');
+
+    socket.emit('message', {data: "test"})
+    socket.on('events', () => {
+      console.log('Wahey -> connected!');
+      socket.emit('events', {some: 'data'});
+    });
+    socket.on('console_error', (err) => {
+      console.log(err.message);
+    });
+  }
+
 
 
   return (
@@ -41,6 +59,10 @@ export default function App() {
         title="stop"
         onPress={stop}></Button>
       <Button title="request permissions" onPress={requestMicrophonePermission} />
+
+      <Button
+        title="connect socket"
+        onPress={connect}></Button>
     </View>
   );
 }
