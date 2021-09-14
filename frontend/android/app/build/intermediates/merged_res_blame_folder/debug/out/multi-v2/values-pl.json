@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
+            "outputFile": "/home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie-new/WalkieTalkie/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
             "map": [
                 {
                     "source": "/home/niels/.gradle/caches/transforms-3/c810a29ee9cc32eddbe9f435a5d40943/transformed/appcompat-1.2.0/res/values-pl/values-pl.xml",
