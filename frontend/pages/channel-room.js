@@ -34,11 +34,9 @@ const requestMicrophonePermission = async () => {
   }
 };
 
-export default function ChannelRoom() {
+export default function ChannelRoom(props) {
   return (
-    <View style={styles.container}>
-      <Text>Channel Room</Text>
-    </View>
+    <View style={styles.container}></View>
   );
 }
 

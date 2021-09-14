@@ -4,15 +4,14 @@ import {PermissionsAndroid, StyleSheet, Text, View, Button} from 'react-native';
 import styles from '../styles/misc';
 
 export default function ChannelSelector(props) {
-  const {navigate, state} = props.navigation;
+  const {navigate} = props.navigation;
 
   return (
     <View style={styles.container}>
-      <Text>Channel Selector</Text>
       <Button
-        title="test"
+        title="Go to room"
         onPress={() => {
-          navigate('ChannelRoom');
+          navigate('Channel Room');
         }}></Button>
     </View>
   );
