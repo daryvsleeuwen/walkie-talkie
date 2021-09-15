@@ -17,9 +17,9 @@ const styles = StyleSheet.create({
   },
 
   pageTitle: {
-    fontSize: 26,
+    fontSize: 28,
     color: '#272727',
-    fontWeight: 'bold'
+    fontFamily: 'Poppins-Medium'
   },
 
   pageContent: {
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ffffff',
     textAlign: 'center',
+    fontFamily: 'Poppins-Regular'
   }
 });
 
