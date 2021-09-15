@@ -11,6 +11,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// react-native-fs
+import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-live-audio-stream
@@ -19,6 +21,8 @@ import com.imxiqi.rnliveaudiostream.RNLiveAudioStreamPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-sound-player
+import com.johnsonsu.rnsoundplayer.RNSoundPlayerPackage;
 
 public class PackageList {
   private Application application;
@@ -64,10 +68,12 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNLiveAudioStreamPackage(),
       new ReanimatedPackage(),
-      new RNScreensPackage()
+      new RNScreensPackage(),
+      new RNSoundPlayerPackage()
     ));
   }
 }

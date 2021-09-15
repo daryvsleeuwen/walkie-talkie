@@ -11,8 +11,10 @@ MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.54.0] /home/niels/.gra
 MERGED from [:unimodules-react-native-adapter] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-17:12
 MERGED from [:expo-splash-screen] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-splash-screen/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-fs] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-fs/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-sound-player] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-sound-player/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:2:1-13:12
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-37:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/niels/.gradle/caches/transforms-3/4a8afa75ba36a884751b261ed379b805/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -142,6 +144,8 @@ MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWork
 		ADDED from /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/android/app/src/main/AndroidManifest.xml:9:20-75
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/android/app/src/main/AndroidManifest.xml:10:3-78
+MERGED from [:react-native-fs] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-fs/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-81
+MERGED from [:react-native-fs] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-fs/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:11:5-81
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-81
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:5-81
 	android:name
@@ -254,10 +258,14 @@ MERGED from [:expo-splash-screen] /home/niels/School/Semester 7 (minor)/HybridWo
 MERGED from [:expo-splash-screen] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-splash-screen/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-updates] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-updates/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-fs] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-fs/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-fs] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-fs/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sound-player] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-sound-player/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-sound-player] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/react-native-sound-player/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.63.4] /home/niels/.gradle/caches/transforms-3/0bfe5a337810b65803a29f3977c90add/transformed/jetified-react-native-0.63.4/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-file-system] /home/niels/School/Semester 7 (minor)/HybridWorkshop/walkie-talkie/frontend/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-10:41
