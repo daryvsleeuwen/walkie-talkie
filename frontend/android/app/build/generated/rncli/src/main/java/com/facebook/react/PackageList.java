@@ -19,8 +19,6 @@ import com.imxiqi.rnliveaudiostream.RNLiveAudioStreamPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
-// react-native-socketio
-import com.gcrabtree.rctsocketio.SocketIoPackage;
 
 public class PackageList {
   private Application application;
@@ -69,8 +67,7 @@ public class PackageList {
       new RNGestureHandlerPackage(),
       new RNLiveAudioStreamPackage(),
       new ReanimatedPackage(),
-      new RNScreensPackage(),
-      new SocketIoPackage()
+      new RNScreensPackage()
     ));
   }
 }

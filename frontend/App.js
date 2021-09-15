@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Button,PermissionsAndroid , StyleSheet, Text, View } from 'react-native';
-//import { SOcket } from "react-native-socketio"
 import { io } from "socket.io-client";
 
 import LiveAudioStream from 'react-native-live-audio-stream';
@@ -31,18 +30,12 @@ export default function App() {
   }
 
   let connect = () => {
-    var socketConfig = { path: '/' };
 
     console.log('creating socket object...')
-    var socket = new io('http://localhost:3000');
+    var socket = new io('http://145.93.117.164:8000');
 
-    socket.emit('message', {data: "test"})
-    socket.on('events', () => {
+    socket.on('connect', () => {
       console.log('Wahey -> connected!');
-      socket.emit('events', {some: 'data'});
-    });
-    socket.on('console_error', (err) => {
-      console.log(err.message);
     });
   }
 
@@ -50,7 +43,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.jsss to start working on your app!</Text>
+      <Text>Open up App.jjjjsshhs to start working on your app!</Text>
       <StatusBar style="auto" />
       <Button
         title="record"
