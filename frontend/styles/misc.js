@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   
   pageTitleBox: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 55
   },
 
@@ -21,13 +22,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 
+  pageContent: {
+    flex: 1,
+    marginBottom: 30 
+  },
+
   button: {
     borderRadius: 5,
-    padding: 14,
-    textAlign: 'center',
-    flex: 1,
+    padding: 12,  
+    width: '100%',
+    backgroundColor: '#FF4848',
+  },
+
+  buttonText: {
+    fontSize: 16,
     color: '#ffffff',
-    backgroundColor: '#FF4848'
+    textAlign: 'center',
   }
 });
 
