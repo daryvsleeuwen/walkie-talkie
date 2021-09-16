@@ -1,5 +1,5 @@
 import React from 'react';
-import {PermissionsAndroid, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
 import LiveAudioStream from 'react-native-live-audio-stream';
 import BackNavigation from '../components/back-navigator';
 import styles from '../styles/misc';
@@ -36,12 +36,13 @@ const requestMicrophonePermission = async () => {
 
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
+  const {frequency} = props.route.params;
 
   return (
     <View style={styles.container}>
       <View style={styles.pageTitleBox}>
           <BackNavigation navigate={navigate}></BackNavigation>
-        <Text style={styles.pageTitle}>Channel 107.3</Text>
+        <Text style={styles.pageTitle}>Channel {frequency}</Text>
       </View>
     </View>
   );
