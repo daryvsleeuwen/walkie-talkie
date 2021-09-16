@@ -22,9 +22,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium'
   },
 
+  centerPageTitle:{
+    flex: 1,
+    textAlign: 'center'
+  },
+
   pageContent: {
     flex: 1,
-    marginBottom: 30 
+    marginBottom: 30,
   },
 
   button: {

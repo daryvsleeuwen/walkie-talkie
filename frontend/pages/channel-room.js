@@ -1,7 +1,7 @@
 import React from 'react';
 import LiveAudioStream from 'react-native-live-audio-stream';
 import BackNavigation from '../components/back-navigator';
-import {Button, PermissionsAndroid, RefreshControlBase, StyleSheet, Text, View} from 'react-native';
+import {Animated, PermissionsAndroid, StyleSheet, Text, View, Pressable, Easing} from 'react-native';
 import {io} from 'socket.io-client';
 import {Buffer} from 'buffer';
 // import RNFS from 'react-native-fs';
@@ -9,31 +9,26 @@ import SoundPlayer from 'react-native-sound-player';
 import 'react-native-url-polyfill/auto';
 import styles from '../styles/misc';
 
-var socket;
-var roomid = 0;
-
-let record = () => {
-  const options = {
-    sampleRate: 16000,
-    channels: 1,
-    bitsPerSample: 16,
-    audioSource: 6,
-    bufferSize: 4096,
-  };
-
-  LiveAudioStream.init(options);
-
-  LiveAudioStream.on('data', (data) => {
-    socket.emit('audio', {
-      roomid: roomid,
-      audiodata: data,
-    });
-  });
-
-  LiveAudioStream.start();
+let socket;
+let roomid = 0;
+const options = {
+  sampleRate: 16000,
+  channels: 1,
+  bitsPerSample: 16,
+  audioSource: 6,
+  bufferSize: 4096,
 };
 
-let stop = () => {
+LiveAudioStream.init(options);
+
+LiveAudioStream.on('data', (data) => {
+  socket.emit('audio', {
+    roomid: roomid,
+    audiodata: data,
+  });
+});
+
+let leaveRoom = () => {
   LiveAudioStream.stop();
   socket.emit('leave_room', roomid);
 };
@@ -48,7 +43,6 @@ let connect = () => {
   socket.on('connect', () => {
     socket.emit('join_room', roomid);
     //SoundPlayer.playUrl('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-    console.log('connected');
   });
 
   let counter = 0;
@@ -57,7 +51,6 @@ let connect = () => {
   let base64data = '';
 
   socket.on('data_incoming', (data) => {
-    console.log('incoming data: ');
     let chunk = Buffer.from(data, 'base64');
     let blob = new Blob([chunk], {type: 'audio/wav'});
 
@@ -68,14 +61,11 @@ let connect = () => {
 
     fileReaderInstance.onload = () => {
       base64data = fileReaderInstance.result;
-      console.log('1 (:' + base64data);
     };
     try {
       console.log(base64data);
       SoundPlayer.playUrl(base64data);
-    } catch (e) {
-      console.log(`cannot play the sound file`, e);
-    }
+    } catch (e) {}
   });
   //   if (counter < 0){
   //     console.log(counter);
@@ -101,10 +91,12 @@ let connect = () => {
 };
 
 let send = () => {
-  socket.emit('audio', {
-    roomid: roomid,
-    audiodata: 'data',
-  });
+  console.log('sending data');
+
+  // socket.emit('audio', {
+  //   roomid: roomid,
+  //   audiodata: 'data',
+  // });
 };
 
 const requestMicrophonePermission = async () => {
@@ -124,22 +116,87 @@ const requestMicrophonePermission = async () => {
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
   const {frequency} = props.route.params;
+  const animatedButtonScale = new Animated.Value(1);
+  connect();
+
+  const scaleButtonDown = () => {
+    Animated.timing(animatedButtonScale, {
+      toValue: 0.8,
+      duration: 300,
+      easing: Easing.bezier(.38,.46,.08,.91),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const scaleButtonUp = () => {
+    Animated.timing(animatedButtonScale, {
+      toValue: 1,
+      easing: Easing.bezier(.38,.46,.08,.91),
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.pageTitleBox}>
-        <BackNavigation navigate={navigate}></BackNavigation>
+        <BackNavigation navigate={navigate} onBack={leaveRoom}></BackNavigation>
         <Text style={styles.pageTitle}>Channel {frequency}</Text>
       </View>
 
-      <Button title="record" onPress={record}></Button>
-      <Button title="stop" onPress={stop}></Button>
-      <Button title="request permissions" onPress={requestMicrophonePermission} />
+      {/* Display all clients in channel */}
+      <View style={styles.pageContent}></View>
 
-      <Button title="connect socket" onPress={connect}></Button>
-      <Button title="send message socket" onPress={send}></Button>
+      <View style={pageStyles.pushToTalkCenterer}>
+        <Animated.View style={{transform: [{scale: animatedButtonScale}]}}>
+          <Pressable
+            style={pageStyles.pushToTalkbutton}
+            onPressIn={() => {
+              scaleButtonDown();
+              LiveAudioStream.start();
+              send();
+            }}
+            onPressOut={() => {
+              scaleButtonUp();
+              LiveAudioStream.stop();
+            }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={pageStyles.pushToTalkText}>Push me</Text>
+            </View>
+          </Pressable>
+        </Animated.View>
+      </View>
     </View>
   );
 }
 
-const pageStyles = StyleSheet.create({});
+const pageStyles = StyleSheet.create({
+  pushToTalkCenterer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+
+  pushToTalkbutton: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: '#FF4848',
+    borderWidth: 3,
+    borderColor: '#272727',
+    padding: 10,
+    alignItems: 'center',
+  },
+
+  pushToTalkText: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Medium',
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+});

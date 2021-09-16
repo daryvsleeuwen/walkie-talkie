@@ -25,7 +25,7 @@ export default function ChannelSelector(props) {
     <View style={styles.container}>
       {/* General page title box */}
       <View style={styles.pageTitleBox}>
-        <Text style={styles.pageTitle}>Select Frequency</Text>
+        <Text style={[styles.pageTitle, styles.centerPageTitle]}>Select Frequency</Text>
       </View>
 
       {/* General middle part of page */}
