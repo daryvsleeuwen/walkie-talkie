@@ -72,5 +72,7 @@
 		<string>Poppins-Thin.ttf</string>
 		<string>Poppins-ThinItalic.ttf</string>
 	</array>
+  <key>UIStatusBarStyle</key>
+  <string>UIStatusBarStyleDefault</string>
 </dict>
 </plist>
