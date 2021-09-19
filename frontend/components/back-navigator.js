@@ -1,5 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Pressable} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import backIcon from '../assets/icons/arrow-back.svg';
 
 export default function BackNavigator(props){
 
@@ -13,7 +15,9 @@ export default function BackNavigator(props){
 
                     props.navigate('channel-selector');
                 }
-            }}></Pressable>
+            }}>
+                <SvgXml xml={backIcon} width="100%" height="100%"></SvgXml>
+            </Pressable>
         </View>
     );
 }
@@ -22,7 +26,7 @@ const styles = StyleSheet.create({
     backButton: {
         width: 36,
         height: 36,
-        backgroundColor: '#FF4848',
-        marginRight: 10
+        marginRight: 10,
+        marginBottom: 5
     }
 })
