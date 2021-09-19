@@ -7,6 +7,7 @@ import {Buffer} from 'buffer';
 // import RNFS from 'react-native-fs';
 import SoundPlayer from 'react-native-sound-player';
 import 'react-native-url-polyfill/auto';
+import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 
 let socket;
@@ -145,7 +146,9 @@ export default function ChannelRoom(props) {
       </View>
 
       {/* Display all clients in channel */}
-      <View style={styles.pageContent}></View>
+      <View style={styles.pageContent}>
+        <JoinedUser userName="talker#24523" talking={true}></JoinedUser>
+      </View>
 
       <View style={pageStyles.pushToTalkCenterer}>
         <Animated.View style={{transform: [{scale: animatedButtonScale}]}}>

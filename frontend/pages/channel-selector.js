@@ -56,6 +56,7 @@ const pageStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 45
   },
 
   frequencyPicker: {
