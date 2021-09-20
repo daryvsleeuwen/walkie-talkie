@@ -43,7 +43,8 @@ frontend/.expo/
 frontend/web-build/
 
 
-frontend/android/
+frontend/android/app/build
+
 frontend/ios/
 
 backend/dist
