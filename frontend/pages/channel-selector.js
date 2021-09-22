@@ -8,7 +8,6 @@ export default function ChannelSelector(props) {
   const [selectedFrequency, setSelectedFrequency] = React.useState(0);
   const frequencys = [61.5, 74.2, 88.6, 107.3, 121.8, 137.2, 159.7];
   const frequecySelectors = [];
-
   frequencys.forEach((frequecy, index) => {
     frequecySelectors.push(
       <Picker.Item key={index} value={index}>
