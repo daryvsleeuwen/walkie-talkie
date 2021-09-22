@@ -44,7 +44,13 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
     fontFamily: 'Poppins-Medium'
-  }
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
 
 export default styles;

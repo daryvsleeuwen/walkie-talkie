@@ -43,8 +43,9 @@ frontend/.expo/
 frontend/web-build/
 
 
-frontend/android/build/
-frontend/ios/build/
+frontend/android/app/build
+
+frontend/ios/
 
 backend/dist
 backend/node_modules

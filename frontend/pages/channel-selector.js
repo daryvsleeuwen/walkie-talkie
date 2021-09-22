@@ -7,15 +7,6 @@ export default function ChannelSelector(props) {
   const {navigate} = props.navigation;
   const [selectedFrequency, setSelectedFrequency] = React.useState(0);
   const frequencys = [61.5, 74.2, 88.6, 107.3, 121.8, 137.2, 159.7];
-  const frequecySelectors = [];
-
-  frequencys.forEach((frequecy, index) => {
-    frequecySelectors.push(
-      <Picker.Item key={index} value={index}>
-        {frequecy}
-      </Picker.Item>
-    );
-  });
 
   const updateFrequency = (selected) => {
     setSelectedFrequency(selected);
@@ -32,7 +23,11 @@ export default function ChannelSelector(props) {
       <View style={styles.pageContent}>
         <View style={pageStyles.frequencyPickerBox}>
           <Picker style={pageStyles.frequencyPicker} selectedValue={selectedFrequency} onValueChange={updateFrequency}>
-            {frequecySelectors}
+            {
+              frequencys.map((frequency, index) =>{
+                return <Picker.Item key={index} value={index}>{frequency}</Picker.Item>
+              })
+            }
           </Picker>
           <Text style={pageStyles.frequencyText}>Mhz</Text>
         </View>
@@ -43,7 +38,7 @@ export default function ChannelSelector(props) {
         activeOpacity={0.8}
         style={styles.button}
         onPress={() => {
-          navigate('channel-room', {frequency: frequencys[selectedFrequency]});
+          navigate('channel-room', {roomid: selectedFrequency,frequency: frequencys[selectedFrequency]});
         }}>
         <Text style={styles.buttonText}>Join Channel</Text>
       </TouchableOpacity>
@@ -56,6 +51,7 @@ const pageStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 45
   },
 
   frequencyPicker: {
