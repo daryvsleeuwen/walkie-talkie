@@ -1,48 +1,38 @@
-
 const server = require('http').createServer();
 const io = require('socket.io')(server, {
-    cors: {
-        origin: "*",
-    }
+  cors: {
+    origin: '*',
+  },
 });
 
-var rooms = [[]];
+let rooms = [[], [], [], [], [], [], []];
 
-
-io.on('connection', client => {
-  client.on('connect', () => {
-      console.log('client connected');
-  });
-
-  client.on('disconnect', () => {
-    console.log('client disconnected');
-  });
-
+io.on('connection', (client) => {
   client.on('audio', (data) => {
-    console.log("data received");
-
-
-    rooms[data.roomid].forEach(cl => {
-      console.log(cl.id)
-      console.log(client.id)
-      if (cl.id == client.id){
-
-        client.emit('data_incoming', data.audiodata);
-      } 
+    rooms[data.roomid].forEach((cl) => {
+      if (cl.id == client.id) {
+        client.emit('audio_incoming', data.audiodata);
+      }
     });
   });
 
-  client.on('join_room', (data) => {
-    console.log('joining room ' + data)
-    rooms[data].push(client);
-  })
+  client.on('join_room', (roomid) => {
+    rooms[roomid].push(client);
+    updateJoinedClients(rooms[roomid]);
+  });
 
-  client.on('leave_room', (data) => {
-    console.log('leaving rooom ' + data)
-    var clientIndex = rooms[data].indexOf(client);
-    rooms[data].splice(clientIndex, 1)
-  })
+  client.on('leave_room', (roomid) => {
+    let clientIndex = rooms[roomid].indexOf(client);
+    rooms[roomid].splice(clientIndex, 1);
+    updateJoinedClients(rooms[roomid]);
+  });
 });
 
+function updateJoinedClients(room) {
+  room.forEach((client) => {
+    client.emit('update_joined_users', {updated: room.map(cl =>{return cl.id})});
+  });
+}
+
 server.listen(8000);
-console.log('server started...')
+console.log('server started...');

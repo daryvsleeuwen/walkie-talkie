@@ -1,4 +1,5 @@
 import React from 'react';
+import {useEffect} from 'react';
 import LiveAudioStream from 'react-native-live-audio-stream';
 import BackNavigation from '../components/back-navigator';
 import {Animated, PermissionsAndroid, StyleSheet, Text, View, Pressable, Easing} from 'react-native';
@@ -11,8 +12,6 @@ import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 import Sound from 'react-native-sound';
 
-let socket;
-let roomid = 0;
 const options = {
   sampleRate: 16000,
   channels: 1,
@@ -112,15 +111,55 @@ const requestMicrophonePermission = async () => {
 
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
-  const {frequency} = props.route.params;
+  let {roomid, frequency} = props.route.params;
+  let [joinedUsers, setJoinedUsers] = React.useState([]);
   const animatedButtonScale = new Animated.Value(1);
-  connect();
+  let mounted = false;
+
+  useEffect(() => {
+    mounted = true;
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!joined) {
+    socket.emit('join_room', roomid);
+    joined = true;
+
+    socket.on('update_joined_users', (joinedUsers) => {
+      if(mounted){
+        setJoinedUsers(joinedUsers.updated);
+      }
+    });
+
+    LiveAudioStream.on('data', (data) => {
+      socket.emit('audio', {
+        roomid: roomid,
+        audiodata: data,
+      });
+    });
+  }
+
+  const leaveRoom = () => {
+    LiveAudioStream.stop();
+    socket.emit('leave_room', roomid);
+    joined = false;
+  };
+
+  const send = () => {
+    // socket.emit('audio', {
+    //   roomid: roomid,
+    //   audiodata: 'data',
+    // });
+  };
 
   const scaleButtonDown = () => {
     Animated.timing(animatedButtonScale, {
       toValue: 0.8,
       duration: 300,
-      easing: Easing.bezier(.38,.46,.08,.91),
+      easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
       useNativeDriver: true,
     }).start();
   };
@@ -128,7 +167,7 @@ export default function ChannelRoom(props) {
   const scaleButtonUp = () => {
     Animated.timing(animatedButtonScale, {
       toValue: 1,
-      easing: Easing.bezier(.38,.46,.08,.91),
+      easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -143,7 +182,11 @@ export default function ChannelRoom(props) {
 
       {/* Display all clients in channel */}
       <View style={styles.pageContent}>
-        <JoinedUser userName="talker#24523" talking={true}></JoinedUser>
+        {joinedUsers.map((user, index) => {
+          if (user !== socket.id) {
+            return <JoinedUser key={index} userName={user} talking={false}></JoinedUser>;
+          }
+        })}
       </View>
 
       <View style={pageStyles.pushToTalkCenterer}>

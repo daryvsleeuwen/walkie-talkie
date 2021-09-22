@@ -42,7 +42,7 @@ export default function ChannelSelector(props) {
         activeOpacity={0.8}
         style={styles.button}
         onPress={() => {
-          navigate('channel-room', {frequency: frequencys[selectedFrequency]});
+          navigate('channel-room', {roomid: selectedFrequency,frequency: frequencys[selectedFrequency]});
         }}>
         <Text style={styles.buttonText}>Join Channel</Text>
       </TouchableOpacity>
