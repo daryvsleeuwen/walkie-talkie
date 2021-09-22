@@ -23,13 +23,7 @@ const options = {
 LiveAudioStream.init(options);
 
 var audioData;
-LiveAudioStream.on('data', (data) => {
-  socket.emit('audio', {
-    roomid: roomid,
-    audiodata: data,
-  });
-  audioData += data;
-})
+
 
 let leaveRoom = () => {
   LiveAudioStream.stop();
@@ -79,9 +73,6 @@ let connect = () => {
       base64data = base64data + data;
       counter++;
     }
-
-
-    
   });
 };
 
@@ -109,6 +100,11 @@ const requestMicrophonePermission = async () => {
   }
 };
 
+
+
+let joined = false;
+let socket = io('http://145.93.141.68:8000');
+
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
   let {roomid, frequency} = props.route.params;
@@ -133,13 +129,6 @@ export default function ChannelRoom(props) {
         setJoinedUsers(joinedUsers.updated);
       }
     });
-
-    LiveAudioStream.on('data', (data) => {
-      socket.emit('audio', {
-        roomid: roomid,
-        audiodata: data,
-      });
-    });
   }
 
   const leaveRoom = () => {
@@ -149,10 +138,13 @@ export default function ChannelRoom(props) {
   };
 
   const send = () => {
-    // socket.emit('audio', {
-    //   roomid: roomid,
-    //   audiodata: 'data',
-    // });
+    LiveAudioStream.start();
+    LiveAudioStream.on('data', (data) => {
+      socket.emit('audio', {
+        roomid: roomid,
+        audiodata: data,
+      });
+    })
   };
 
   const scaleButtonDown = () => {
