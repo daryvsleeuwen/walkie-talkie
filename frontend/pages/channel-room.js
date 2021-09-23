@@ -12,6 +12,7 @@ import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 // import Sound from 'react-native-sound';
 
+let joined = false;
 const options = {
   sampleRate: 16000,
   channels: 1,
@@ -36,14 +37,12 @@ const requestMicrophonePermission = async () => {
   }
 };
 
-let joined = false;
-let socket = io('http://145.93.141.68:8000');
+const animatedButtonScale = new Animated.Value(1);
 
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
-  let {roomid, frequency} = props.route.params;
+  let {roomid, frequency, socket} = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
-  const animatedButtonScale = new Animated.Value(1);
 
   let audioData;
   let base64data = '';
@@ -72,7 +71,7 @@ export default function ChannelRoom(props) {
 
     socket.on('update_joined_users', (joinedUsers) => {
       if (mounted) {
-        setJoinedUsers(joinedUsers.updated);
+        setJoinedUsers(joinedUsers);
       }
     });
 
@@ -109,10 +108,12 @@ export default function ChannelRoom(props) {
 
   const send = () => {
     LiveAudioStream.start();
+    socket.emit('set_talking_state', true);
   };
 
   const stopSending = () => {
     LiveAudioStream.stop();
+    socket.emit('set_talking_state', false);
   };
 
   const scaleButtonDown = () => {
@@ -143,14 +144,15 @@ export default function ChannelRoom(props) {
       {/* Display all clients in channel */}
       <View style={styles.pageContent}>
         {joinedUsers.map((user, index) => {
-          if (user !== socket.id) {
-            return <JoinedUser key={index} userName={user} talking={false}></JoinedUser>;
+          if (user.id !== socket.id) {
+            return <JoinedUser key={index} userName={user.id} talking={user.talking}></JoinedUser>;
           }
         })}
       </View>
 
       <View style={pageStyles.pushToTalkCenterer}>
-        <Animated.View style={{transform: [{scale: animatedButtonScale}]}}>
+        <Animated.View style={[{transform: [{scale: animatedButtonScale}], position: 'relative'}, styles.fullCenter]}>
+          <View style={pageStyles.pushToTalkBackground}></View>
           <Pressable
             style={pageStyles.pushToTalkbutton}
             onPressIn={() => {
@@ -179,8 +181,15 @@ export default function ChannelRoom(props) {
 const pageStyles = StyleSheet.create({
   pushToTalkCenterer: {
     width: '100%',
-    flexDirection: 'row',
     justifyContent: 'center',
+  },
+
+  pushToTalkBackground: {
+    width: 164,
+    height: 164,
+    borderRadius: 82,
+    backgroundColor: 'black',
+    position: 'absolute',
   },
 
   pushToTalkbutton: {
@@ -189,7 +198,7 @@ const pageStyles = StyleSheet.create({
     borderRadius: 80,
     backgroundColor: '#FF4848',
     borderWidth: 3,
-    borderColor: '#272727',
+    borderColor: 'white',
     padding: 10,
     alignItems: 'center',
   },

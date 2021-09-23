@@ -4,17 +4,17 @@ import {SvgXml} from 'react-native-svg';
 import audioIcon from '../assets/icons/audio-wave.svg';
 
 export default function JoinedUser(props) {
-  let userText = props.talking ? [pageStyles.userText, pageStyles.talkingUserText] : pageStyles.userText;
+  let userTextStyling = props.talking ? [pageStyles.userText, pageStyles.talkingUserText] : pageStyles.userText;
 
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={{flexDirection: 'row', marginBottom: 10}}>
       <SvgXml
         xml={audioIcon}
         style={{marginRight: 8}}
         color="red"
         width="25"
         height="25"></SvgXml>
-      <Text style={userText}>
+      <Text style={userTextStyling}>
         {props.userName}
         {props.talking ? ' is now talking' : null}
       </Text>
@@ -31,6 +31,6 @@ const pageStyles = StyleSheet.create({
 
   talkingUserText: {
     color: '#FF4848',
-    fontFamily: 'Poppins-SemiBold',
+    flex: 1
   },
 });
