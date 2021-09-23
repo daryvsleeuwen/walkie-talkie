@@ -16,42 +16,56 @@ let rooms = [
 ];
 
 io.on('connection', (client) => {
-  client.emit(
-    'get_frequencys',
+  let index;
+  let room;
+
+  client.emit('get_frequencys',
     rooms.map((room) => {
       return room.frequency;
     })
   );
 
+  client.on('join_room', (roomid) => {
+    room = roomid;
+    index = rooms[room].clients.length;
+
+    rooms[room].clients.push({talking: false, socket: client});
+    updateJoinedClients(rooms[room].clients);
+  });
+
+  client.on('leave_room', () => {
+    let clientIndex;
+
+    rooms[room].clients.forEach((cl, index) => {
+        if(cl.socket.id === client.id){
+          clientIndex = index
+        }
+    });
+    rooms[room].clients.splice(clientIndex, 1);
+    updateJoinedClients(rooms[room].clients);
+  });
+
   client.on('audio', (data) => {
-    rooms[data.roomid].forEach((cl) => {
+    rooms[room].forEach((cl) => {
       if (cl.id == client.id) {
         client.emit('audio_incoming', data.audiodata);
       }
     });
   });
 
-  client.on('join_room', (roomid) => {
-    rooms[roomid].clients.push(client);
-    updateJoinedClients(rooms[roomid].clients);
-  });
-
-  client.on('leave_room', (roomid) => {
-    let clientIndex = rooms[roomid].clients.indexOf(client);
-    rooms[roomid].clients.splice(clientIndex, 1);
-    updateJoinedClients(rooms[roomid].clients);
+  client.on('set_talking_state', (talking) => {
+    rooms[room].clients[index].talking = talking;
+    updateJoinedClients(rooms[room].clients);
   });
 });
 
 function updateJoinedClients(room) {
-  let filtered = room.map((cl) => {
-    return cl.id;
+  let filtered = room.map((client) => {
+    return {id: client.socket.id, talking: client.talking};
   });
 
   room.forEach((client) => {
-    client.emit('update_joined_users', {
-      updated: filtered,
-    });
+    client.socket.emit('update_joined_users', filtered);
   });
 }
 

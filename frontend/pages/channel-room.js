@@ -37,11 +37,12 @@ const requestMicrophonePermission = async () => {
   }
 };
 
+const animatedButtonScale = new Animated.Value(1);
+
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
   let {roomid, frequency, socket} = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
-  const animatedButtonScale = new Animated.Value(1);
 
   let audioData;
   let base64data = '';
@@ -70,7 +71,7 @@ export default function ChannelRoom(props) {
 
     socket.on('update_joined_users', (joinedUsers) => {
       if (mounted) {
-        setJoinedUsers(joinedUsers.updated);
+        setJoinedUsers(joinedUsers);
       }
     });
 
@@ -107,10 +108,12 @@ export default function ChannelRoom(props) {
 
   const send = () => {
     LiveAudioStream.start();
+    socket.emit('set_talking_state', true);
   };
 
   const stopSending = () => {
     LiveAudioStream.stop();
+    socket.emit('set_talking_state', false);
   };
 
   const scaleButtonDown = () => {
@@ -141,8 +144,8 @@ export default function ChannelRoom(props) {
       {/* Display all clients in channel */}
       <View style={styles.pageContent}>
         {joinedUsers.map((user, index) => {
-          if (user !== socket.id) {
-            return <JoinedUser key={index} userName={user} talking={false}></JoinedUser>;
+          if (user.id !== socket.id) {
+            return <JoinedUser key={index} userName={user.id} talking={user.talking}></JoinedUser>;
           }
         })}
       </View>

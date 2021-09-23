@@ -7,7 +7,7 @@ export default function JoinedUser(props) {
   let userTextStyling = props.talking ? [pageStyles.userText, pageStyles.talkingUserText] : pageStyles.userText;
 
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={{flexDirection: 'row', marginBottom: 10}}>
       <SvgXml
         xml={audioIcon}
         style={{marginRight: 8}}
@@ -31,6 +31,6 @@ const pageStyles = StyleSheet.create({
 
   talkingUserText: {
     color: '#FF4848',
-    fontFamily: 'Poppins-SemiBold',
+    flex: 1
   },
 });
