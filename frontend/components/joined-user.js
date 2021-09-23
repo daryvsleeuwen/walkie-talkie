@@ -4,7 +4,7 @@ import {SvgXml} from 'react-native-svg';
 import audioIcon from '../assets/icons/audio-wave.svg';
 
 export default function JoinedUser(props) {
-  let userText = props.talking ? [pageStyles.userText, pageStyles.talkingUserText] : pageStyles.userText;
+  let userTextStyling = props.talking ? [pageStyles.userText, pageStyles.talkingUserText] : pageStyles.userText;
 
   return (
     <View style={{flexDirection: 'row'}}>
@@ -14,7 +14,7 @@ export default function JoinedUser(props) {
         color="red"
         width="25"
         height="25"></SvgXml>
-      <Text style={userText}>
+      <Text style={userTextStyling}>
         {props.userName}
         {props.talking ? ' is now talking' : null}
       </Text>

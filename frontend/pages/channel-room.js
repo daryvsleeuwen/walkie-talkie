@@ -41,7 +41,7 @@ let socket = io('http://145.93.141.68:8000');
 
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
-  let {roomid, frequency} = props.route.params;
+  let {roomid, frequency, socket} = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
   const animatedButtonScale = new Animated.Value(1);
 

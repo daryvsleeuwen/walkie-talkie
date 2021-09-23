@@ -20,7 +20,7 @@ export default function ChannelSelector(props) {
       </View>
 
       {/* General middle part of page */}
-      <View style={styles.pageContent}>
+      <View style={[styles.pageContent, {justifyContent: 'center', paddingBottom: 55}]}>
         <View style={pageStyles.frequencyPickerBox}>
           <Picker style={pageStyles.frequencyPicker} selectedValue={selectedFrequency} onValueChange={updateFrequency}>
             {
