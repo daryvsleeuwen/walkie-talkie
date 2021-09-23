@@ -5,10 +5,15 @@ import styles from '../styles/misc';
 
 export default function ChannelSelector(props) {
   const {navigate} = props.navigation;
+  const {socket} = props.route.params;
+  let [frequencys, setFrequencys] = React.useState([]);
   const [selectedFrequency, setSelectedFrequency] = React.useState(0);
-  const frequencys = [61.5, 74.2, 88.6, 107.3, 121.8, 137.2, 159.7];
 
-  const updateFrequency = (selected) => {
+  socket.on('get_frequencys', frequencys =>{
+    setFrequencys(frequencys);
+  });
+
+  const updateSelectedFrequency = (selected) => {
     setSelectedFrequency(selected);
   };
 
@@ -22,7 +27,7 @@ export default function ChannelSelector(props) {
       {/* General middle part of page */}
       <View style={[styles.pageContent, {justifyContent: 'center', paddingBottom: 55}]}>
         <View style={pageStyles.frequencyPickerBox}>
-          <Picker style={pageStyles.frequencyPicker} selectedValue={selectedFrequency} onValueChange={updateFrequency}>
+          <Picker style={pageStyles.frequencyPicker} selectedValue={selectedFrequency} onValueChange={updateSelectedFrequency}>
             {
               frequencys.map((frequency, index) =>{
                 return <Picker.Item key={index} value={index}>{frequency}</Picker.Item>
