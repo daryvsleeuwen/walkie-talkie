@@ -10,7 +10,7 @@ import SoundPlayer from 'react-native-sound-player';
 import 'react-native-url-polyfill/auto';
 import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
-import Sound from 'react-native-sound';
+// import Sound from 'react-native-sound';
 
 const options = {
   sampleRate: 16000,
@@ -21,70 +21,6 @@ const options = {
 };
 
 LiveAudioStream.init(options);
-
-var audioData;
-
-
-let leaveRoom = () => {
-  LiveAudioStream.stop();
-  socket.emit('leave_room', roomid);
-};
-
-let connect = () => {
-  SoundPlayer.addEventListener('FinishedLoadingURL', ({success, url}) => {
-    console.log('finished loading url', success, url);
-  });
-
-  socket = io('http://145.93.117.223:8000');
-
-  socket.on('connect', () => {
-    socket.emit('join_room', roomid);
-    //SoundPlayer.playUrl('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-  });
-
-  let base64data = '';
-  let chunknum = 0;
-  let counter = 0;
-  socket.on('data_incoming', (data) => {
-    //const url = 'data:audio/x-wav;base64,' + "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + data; //URL.createObjectURL(blob.blob);
-    if (counter > 10){
-      const path = RNFS.ExternalDirectoryPath + "/chunk_num" + chunknum + '.wav';
-        RNFS.writeFile(path, "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + base64data, "base64")
-        .then((success) => {
-          console.log('wrote to file')
-          console.log(path);
-            console.log('trying to play...');
-            try {
-              var sound = new Sound(path);
-              sound.play();
-              //SoundPlayer.playSoundFile(path);
-            } catch (error) {
-              console.log(error.message)
-            }
-            
-          
-        })
-        .catch((err) => {
-          console.log(err.message)
-        });
-      chunknum++;
-      counter = 0;
-    }else{
-      base64data = base64data + data;
-      counter++;
-    }
-  });
-};
-
-let send = () => {
-  console.log('starting audio stream...');
-  LiveAudioStream.start();
-};
-
-let stopSending = () => {
-  console.log('stopping audio stream...');
-  LiveAudioStream.stop();
-}
 
 const requestMicrophonePermission = async () => {
   try {
@@ -100,8 +36,6 @@ const requestMicrophonePermission = async () => {
   }
 };
 
-
-
 let joined = false;
 let socket = io('http://145.93.141.68:8000');
 
@@ -110,7 +44,19 @@ export default function ChannelRoom(props) {
   let {roomid, frequency} = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
   const animatedButtonScale = new Animated.Value(1);
+
+  let audioData;
+  let base64data = '';
+  let chunknum = 0;
+  let counter = 0;
   let mounted = false;
+
+  LiveAudioStream.on('data', (data) => {
+    socket.emit('audio', {
+      roomid: roomid,
+      audiodata: data,
+    });
+  });
 
   useEffect(() => {
     mounted = true;
@@ -125,8 +71,32 @@ export default function ChannelRoom(props) {
     joined = true;
 
     socket.on('update_joined_users', (joinedUsers) => {
-      if(mounted){
+      if (mounted) {
         setJoinedUsers(joinedUsers.updated);
+      }
+    });
+
+    socket.on('data_incoming', (data) => {
+      //const url = 'data:audio/x-wav;base64,' + "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + data; //URL.createObjectURL(blob.blob);
+      if (counter > 10) {
+        const path = RNFS.ExternalDirectoryPath + '/chunk_num' + chunknum + '.wav';
+        RNFS.writeFile(path, 'UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9' + base64data, 'base64')
+          .then((success) => {
+            try {
+              let sound = new Sound(path);
+              sound.play();
+            } catch (error) {
+              console.log(error.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+        chunknum++;
+        counter = 0;
+      } else {
+        base64data = base64data + data;
+        counter++;
       }
     });
   }
@@ -139,12 +109,10 @@ export default function ChannelRoom(props) {
 
   const send = () => {
     LiveAudioStream.start();
-    LiveAudioStream.on('data', (data) => {
-      socket.emit('audio', {
-        roomid: roomid,
-        audiodata: data,
-      });
-    })
+  };
+
+  const stopSending = () => {
+    LiveAudioStream.stop();
   };
 
   const scaleButtonDown = () => {
