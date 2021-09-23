@@ -12,6 +12,7 @@ import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 // import Sound from 'react-native-sound';
 
+let joined = false;
 const options = {
   sampleRate: 16000,
   channels: 1,
@@ -35,9 +36,6 @@ const requestMicrophonePermission = async () => {
     console.warn(err);
   }
 };
-
-let joined = false;
-let socket = io('http://145.93.141.68:8000');
 
 export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
