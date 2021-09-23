@@ -16,9 +16,12 @@ let rooms = [
 ];
 
 io.on('connection', (client) => {
-  client.emit('get_frequencys', rooms.map(room =>{
-    return room.frequency;
-  }));
+  client.emit(
+    'get_frequencys',
+    rooms.map((room) => {
+      return room.frequency;
+    })
+  );
 
   client.on('audio', (data) => {
     rooms[data.roomid].forEach((cl) => {
@@ -30,21 +33,24 @@ io.on('connection', (client) => {
 
   client.on('join_room', (roomid) => {
     rooms[roomid].clients.push(client);
-    updateJoinedClients(rooms[roomid].clients)});
+    updateJoinedClients(rooms[roomid].clients);
+  });
 
   client.on('leave_room', (roomid) => {
-    let clientIndex = rooms[roomid].indexOf(client);
+    let clientIndex = rooms[roomid].clients.indexOf(client);
     rooms[roomid].clients.splice(clientIndex, 1);
     updateJoinedClients(rooms[roomid].clients);
   });
 });
 
 function updateJoinedClients(room) {
+  let filtered = room.map((cl) => {
+    return cl.id;
+  });
+
   room.forEach((client) => {
     client.emit('update_joined_users', {
-      updated: room.map((cl) => {
-        return cl.id;
-      }),
+      updated: filtered,
     });
   });
 }
