@@ -148,7 +148,8 @@ export default function ChannelRoom(props) {
       </View>
 
       <View style={pageStyles.pushToTalkCenterer}>
-        <Animated.View style={{transform: [{scale: animatedButtonScale}]}}>
+        <Animated.View style={[{transform: [{scale: animatedButtonScale}], position: 'relative'}, styles.fullCenter]}>
+          <View style={pageStyles.pushToTalkBackground}></View>
           <Pressable
             style={pageStyles.pushToTalkbutton}
             onPressIn={() => {
@@ -177,8 +178,15 @@ export default function ChannelRoom(props) {
 const pageStyles = StyleSheet.create({
   pushToTalkCenterer: {
     width: '100%',
-    flexDirection: 'row',
     justifyContent: 'center',
+  },
+
+  pushToTalkBackground: {
+    width: 164,
+    height: 164,
+    borderRadius: 82,
+    backgroundColor: 'black',
+    position: 'absolute',
   },
 
   pushToTalkbutton: {
@@ -187,7 +195,7 @@ const pageStyles = StyleSheet.create({
     borderRadius: 80,
     backgroundColor: '#FF4848',
     borderWidth: 3,
-    borderColor: '#272727',
+    borderColor: 'white',
     padding: 10,
     alignItems: 'center',
   },
