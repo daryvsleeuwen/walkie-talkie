@@ -84,7 +84,8 @@ export default function ChannelRoom(props) {
 
     socket.on('update_joined_users', (joinedUsers) => {
       if (mounted) {
-        setJoinedUsers(joinedUsers);
+        //TODO: This is broken somehow
+        //setJoinedUsers(joinedUsers);
       }
     });
 
@@ -120,34 +121,38 @@ export default function ChannelRoom(props) {
       console.log(engine)
       engine.enableAudio();
 
-      engine.addListener('UserJoined', (uid, elapsed) => {
-        console.log('User joined', uid, elapsed)
-      })
+      // engine.addListener('UserJoined', (uid, elapsed) => {
+      //   console.log('User joined', uid, elapsed)
+      // })
 
-      engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed)
-      })
+      // engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
+      //   console.log('JoinChannelSuccess', channel, uid, elapsed)
+      // })
 
-      engine.joinChannel(state.token, state.channelName, null, 0);
+      engine.joinChannel(state.token, 'channel_' + roomid, null, 0);
+
+      engine.setEnableSpeakerphone(props.enableSpeakerphone)
     })
 
 
 
 
     const leaveRoom = () => {
-      LiveAudioStream.stop();
+      //LiveAudioStream.stop();
       socket.emit('leave_room', roomid);
       joined = false;
     };
 
     const send = () => {
-      LiveAudioStream.start();
+      //LiveAudioStream.start();
       socket.emit('set_talking_state', true);
+      engine.enableLocalAudio(true);
     };
 
     const stopSending = () => {
-      LiveAudioStream.stop();
+      //LiveAudioStream.stop();
       socket.emit('set_talking_state', false);
+      engine.enableLocalAudio(false);
     };
 
     const scaleButtonDown = () => {
@@ -211,7 +216,7 @@ export default function ChannelRoom(props) {
       </View>
     );
   }
-
+}
   const pageStyles = StyleSheet.create({
     pushToTalkCenterer: {
       width: '100%',
@@ -244,4 +249,3 @@ export default function ChannelRoom(props) {
       textAlign: 'center',
     },
   });
-}
