@@ -3,15 +3,10 @@ import { useEffect } from 'react';
 import LiveAudioStream from 'react-native-live-audio-stream';
 import BackNavigation from '../components/back-navigator';
 import { Animated, PermissionsAndroid, StyleSheet, Text, View, Pressable, Easing } from 'react-native';
-import { io } from 'socket.io-client';
-import { Buffer } from 'buffer';
-import RNFS from 'react-native-fs';
-import SoundPlayer from 'react-native-sound-player';
 import 'react-native-url-polyfill/auto';
 import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 import RtcEngine from 'react-native-agora'
-// import Sound from 'react-native-sound';
 
 let joined = false;
 const options = {
@@ -24,20 +19,6 @@ const options = {
 
 LiveAudioStream.init(options);
 
-const requestMicrophonePermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, {
-      title: 'Microphone usage',
-      message: 'Please accept for microphone usage',
-      buttonNeutral: 'Ask Me Later',
-      buttonNegative: 'Cancel',
-      buttonPositive: 'OK',
-    });
-  } catch (err) {
-    console.warn(err);
-  }
-};
-
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token: '006973ff918e3064ce4ba5e71bac6d06267IAAaIX36emN+3tm2X4W2dOelpjKEPSGi+zSzI0N69fWcc49auH4AAAAAEADy5cWPAHRVYQEAAQAAdFVh',
@@ -49,19 +30,21 @@ let agoraState = {
 }
 
 
-
 const animatedButtonScale = new Animated.Value(1);
+
+
 
 export default function ChannelRoom(props) {
   const { navigate } = props.navigation;
   let { roomid, frequency, socket } = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
+  let [joined, setJoined] = React.useState(false);
+  let engine;
 
-  // let audioData;
-  // let base64data = '';
-  // let chunknum = 0;
-  // let counter = 0;
   let mounted = false;
+
+  
+
 
   LiveAudioStream.on('data', (data) => {
     socket.emit('audio', {
@@ -78,113 +61,114 @@ export default function ChannelRoom(props) {
     };
   }, []);
 
-  if (!joined) {
+  if (joined != true) {
     socket.emit('join_room', roomid);
-    joined = true;
-
-    socket.on('update_joined_users', (joinedUsers) => {
-      if (mounted) {
-        //TODO: This is broken somehow
-        //setJoinedUsers(joinedUsers);
-      }
-    });
-
-    socket.on('token_receiving', (token) => {
-      RtcEngine.create(agoraState.appId).then(rtcEngine => {
-
-        engine = rtcEngine;
-        engine.enableAudio();
-        
-        engine.joinChannel(token, 'channel_' + roomid, null, 0);
-
-        engine.setEnableSpeakerphone(true)
-        engine.enableLocalAudio(true);
-      })
-    })
-    //AGORA
-    let engine;
-
-
-    const leaveRoom = () => {
-      //LiveAudioStream.stop();
-      socket.emit('leave_room', roomid);
-      engine.leaveChannel();
-      joined = false;
-
-    };
-
-    const send = () => {
-      socket.emit('set_talking_state', true);
-      engine.enableLocalAudio(true);
-    };
-
-    const stopSending = () => {
-      socket.emit('set_talking_state', false);
-      engine.enableLocalAudio(false);
-    };
-
-    const scaleButtonDown = () => {
-      Animated.timing(animatedButtonScale, {
-        toValue: 0.8,
-        duration: 300,
-        easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
-        useNativeDriver: true,
-      }).start();
-    };
-
-    const scaleButtonUp = () => {
-      Animated.timing(animatedButtonScale, {
-        toValue: 1,
-        easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    };
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.pageTitleBox}>
-          <BackNavigation navigate={navigate} onBack={leaveRoom}></BackNavigation>
-          <Text style={styles.pageTitle}>Channel {frequency}</Text>
-        </View>
-
-        {/* Display all clients in channel */}
-        <View style={styles.pageContent}>
-          {joinedUsers.map((user, index) => {
-            if (user.id !== socket.id) {
-              return <JoinedUser key={index} userName={user.id} talking={user.talking}></JoinedUser>;
-            }
-          })}
-        </View>
-
-        <View style={pageStyles.pushToTalkCenterer}>
-          <Animated.View style={[{ transform: [{ scale: animatedButtonScale }], position: 'relative' }, styles.fullCenter]}>
-            <View style={pageStyles.pushToTalkBackground}></View>
-            <Pressable
-              style={pageStyles.pushToTalkbutton}
-              onPressIn={() => {
-                scaleButtonDown();
-                send();
-              }}
-              onPressOut={() => {
-                scaleButtonUp();
-                stopSending();
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={pageStyles.pushToTalkText}>Push me</Text>
-              </View>
-            </Pressable>
-          </Animated.View>
-        </View>
-      </View>
-    );
+    setJoined(true);
   }
+
+
+  socket.on('update_joined_users', (joinedUsers) => {
+    if (mounted) {
+      //setJoinedUsers(joinedUsers);
+    }
+  });
+
+  socket.on('token_receiving', (token) => {
+    RtcEngine.create(agoraState.appId).then(rtcEngine => {
+
+      engine = rtcEngine;
+      engine.enableAudio();
+  
+      console.log(roomid)
+      engine.joinChannel(token, 'channel_' + roomid, null, 0);
+  
+      engine.setEnableSpeakerphone(true)
+      engine.enableLocalAudio(true);
+    })
+  })
+
+  const leaveRoom = () => {
+    socket.emit('leave_room', roomid);
+    engine.leaveChannel();
+    joined = false;
+
+  };
+
+  const send = () => {
+    socket.emit('set_talking_state', true);
+    console.log(engine)
+    engine.enableLocalAudio(true);
+  };
+
+  const stopSending = () => {
+    socket.emit('set_talking_state', false);
+    engine.enableLocalAudio(false);
+  };
+
+  const scaleButtonDown = () => {
+    Animated.timing(animatedButtonScale, {
+      toValue: 0.8,
+      duration: 300,
+      easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const scaleButtonUp = () => {
+    Animated.timing(animatedButtonScale, {
+      toValue: 1,
+      easing: Easing.bezier(0.38, 0.46, 0.08, 0.91),
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.pageTitleBox}>
+        <BackNavigation navigate={navigate} onBack={leaveRoom}></BackNavigation>
+        <Text style={styles.pageTitle}>Channel {frequency}</Text>
+      </View>
+
+      {/* Display all clients in channel */}
+      <View style={styles.pageContent}>
+        {joinedUsers.map((user, index) => {
+          if (user.id !== socket.id) {
+            return <JoinedUser key={index} userName={user.id} talking={user.talking}></JoinedUser>;
+          }
+        })}
+      </View>
+
+      <View style={pageStyles.pushToTalkCenterer}>
+        <Animated.View style={[{ transform: [{ scale: animatedButtonScale }], position: 'relative' }, styles.fullCenter]}>
+          <View style={pageStyles.pushToTalkBackground}></View>
+          <Pressable
+            style={pageStyles.pushToTalkbutton}
+            onPressIn={() => {
+              scaleButtonDown();
+              send();
+            }}
+            onPressOut={() => {
+              scaleButtonUp();
+              stopSending();
+            }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={pageStyles.pushToTalkText}>Push me</Text>
+            </View>
+          </Pressable>
+        </Animated.View>
+      </View>
+    </View>
+  );
 }
+
 const pageStyles = StyleSheet.create({
   pushToTalkCenterer: {
     width: '100%',
