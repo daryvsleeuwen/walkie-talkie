@@ -1,6 +1,4 @@
 const { RtcTokenBuilder, RtmTokenBuilder, RtcRole, RtmRole } = require('agora-access-token')
-
-
 const server = require('http').createServer();
 const io = require('socket.io')(server, {
   cors: {
@@ -18,9 +16,6 @@ let rooms = [
   { frequency: 159.7, clients: [] },
 ];
 
-
-
-
 io.on('connection', (client) => {
   let index;
   let room;
@@ -35,8 +30,6 @@ io.on('connection', (client) => {
     room = roomid;
     index = rooms[room].clients.length;
 
-
-
     rooms[room].clients.push({ talking: false, socket: client });
     generateToken(client, roomid);
     updateJoinedClients(rooms[room].clients);
@@ -50,6 +43,7 @@ io.on('connection', (client) => {
         clientIndex = index
       }
     });
+
     rooms[room].clients.splice(clientIndex, 1);
     updateJoinedClients(rooms[room].clients);
   });
@@ -78,7 +72,6 @@ function updateJoinedClients(room) {
   });
 }
 
-
 function generateToken(client, roomid, socket) {
   const appID = '973ff918e3064ce4ba5e71bac6d06267';
   const appCertificate = 'b01b51220fbd4b99bce3e2755649a273';
@@ -94,9 +87,7 @@ function generateToken(client, roomid, socket) {
 
   const token = RtcTokenBuilder.buildTokenWithUid(appID, appCertificate, channelName, uid, role, privilegeExpiredTs);
 
-
   client.emit('token_receiving', token)
 }
 
 server.listen(8000);
-console.log('server started...');

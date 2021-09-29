@@ -8,6 +8,7 @@ import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 import RtcEngine from 'react-native-agora'
 
+let engine;
 let joined = false;
 const options = {
   sampleRate: 16000,
@@ -29,22 +30,14 @@ let agoraState = {
   peerIds: [],
 }
 
-
 const animatedButtonScale = new Animated.Value(1);
-
-
 
 export default function ChannelRoom(props) {
   const { navigate } = props.navigation;
   let { roomid, frequency, socket } = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
   let [joined, setJoined] = React.useState(false);
-  let engine;
-
   let mounted = false;
-
-  
-
 
   LiveAudioStream.on('data', (data) => {
     socket.emit('audio', {
@@ -66,7 +59,6 @@ export default function ChannelRoom(props) {
     setJoined(true);
   }
 
-
   socket.on('update_joined_users', (joinedUsers) => {
     if (mounted) {
       //setJoinedUsers(joinedUsers);
@@ -75,11 +67,9 @@ export default function ChannelRoom(props) {
 
   socket.on('token_receiving', (token) => {
     RtcEngine.create(agoraState.appId).then(rtcEngine => {
-
       engine = rtcEngine;
       engine.enableAudio();
   
-      console.log(roomid)
       engine.joinChannel(token, 'channel_' + roomid, null, 0);
   
       engine.setEnableSpeakerphone(true)
@@ -122,8 +112,6 @@ export default function ChannelRoom(props) {
       useNativeDriver: true,
     }).start();
   };
-
-
 
   return (
     <View style={styles.container}>
