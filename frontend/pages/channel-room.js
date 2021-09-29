@@ -89,46 +89,20 @@ export default function ChannelRoom(props) {
       }
     });
 
-    // socket.on('data_incoming', (data) => {
-    //   //const url = 'data:audio/x-wav;base64,' + "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + data; //URL.createObjectURL(blob.blob);
-    //   if (counter > 10) {
-    //     const path = RNFS.ExternalDirectoryPath + '/chunk_num' + chunknum + '.wav';
-    //     RNFS.writeFile(path, 'UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9' + base64data, 'base64')
-    //       .then((success) => {
-    //         try {
-    //           let sound = new Sound(path);
-    //           sound.play();
-    //         } catch (error) {
-    //           console.log(error.message);
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         console.log(err.message);
-    //       });
-    //     chunknum++;
-    //     counter = 0;
-    //   } else {
-    //     base64data = base64data + data;
-    //     counter++;
-    //   }
-    // });
+    socket.on('token_receiving', (token) => {
+      RtcEngine.create(agoraState.appId).then(rtcEngine => {
 
+        engine = rtcEngine;
+        engine.enableAudio();
+        
+        engine.joinChannel(token, 'channel_' + roomid, null, 0);
+
+        engine.setEnableSpeakerphone(true)
+        engine.enableLocalAudio(true);
+      })
+    })
     //AGORA
     let engine;
-    RtcEngine.create(agoraState.appId).then(rtcEngine => {
-      console.log('initializing rtc engine');
-
-      engine = rtcEngine;
-      engine.enableAudio();
-
-      engine.joinChannel(agoraState.token, 'test_channel', null, 0);
-      //engine.joinChannel(agoraState.token, 'channel_' + roomid, null, 0);
-
-      engine.setEnableSpeakerphone(true)
-      engine.enableLocalAudio(true);
-    })
-
-
 
 
     const leaveRoom = () => {
@@ -136,7 +110,7 @@ export default function ChannelRoom(props) {
       socket.emit('leave_room', roomid);
       engine.leaveChannel();
       joined = false;
-      
+
     };
 
     const send = () => {
@@ -211,35 +185,35 @@ export default function ChannelRoom(props) {
     );
   }
 }
-  const pageStyles = StyleSheet.create({
-    pushToTalkCenterer: {
-      width: '100%',
-      justifyContent: 'center',
-    },
+const pageStyles = StyleSheet.create({
+  pushToTalkCenterer: {
+    width: '100%',
+    justifyContent: 'center',
+  },
 
-    pushToTalkBackground: {
-      width: 164,
-      height: 164,
-      borderRadius: 82,
-      backgroundColor: 'black',
-      position: 'absolute',
-    },
+  pushToTalkBackground: {
+    width: 164,
+    height: 164,
+    borderRadius: 82,
+    backgroundColor: 'black',
+    position: 'absolute',
+  },
 
-    pushToTalkbutton: {
-      width: 160,
-      height: 160,
-      borderRadius: 80,
-      backgroundColor: '#FF4848',
-      borderWidth: 3,
-      borderColor: 'white',
-      padding: 10,
-      alignItems: 'center',
-    },
+  pushToTalkbutton: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: '#FF4848',
+    borderWidth: 3,
+    borderColor: 'white',
+    padding: 10,
+    alignItems: 'center',
+  },
 
-    pushToTalkText: {
-      fontSize: 20,
-      fontFamily: 'Poppins-Medium',
-      color: '#ffffff',
-      textAlign: 'center',
-    },
-  });
+  pushToTalkText: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Medium',
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+});
