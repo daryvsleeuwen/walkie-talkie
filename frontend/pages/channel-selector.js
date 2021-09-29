@@ -9,7 +9,7 @@ export default function ChannelSelector(props) {
   let [frequencys, setFrequencys] = React.useState([]);
   const [selectedFrequency, setSelectedFrequency] = React.useState(0);
 
-  socket.on('get_frequencys', frequencys =>{
+  socket.on('get_frequencys', frequencys => {
     setFrequencys(frequencys);
   });
 

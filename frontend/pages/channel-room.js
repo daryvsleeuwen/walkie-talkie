@@ -38,9 +38,9 @@ const requestMicrophonePermission = async () => {
   }
 };
 
-let state = {
+let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
-  token: '006973ff918e3064ce4ba5e71bac6d06267IADbdLrlhAcym0Fbb3hJwyH4bmNhtk+VLfiiPL4cg2AgdwZa8+gAAAAAEACtrEr9HdtOYQEAAQAd205h',
+  token: '006973ff918e3064ce4ba5e71bac6d06267IAAaIX36emN+3tm2X4W2dOelpjKEPSGi+zSzI0N69fWcc49auH4AAAAAEADy5cWPAHRVYQEAAQAAdFVh',
   channelName: 'testing',
   openMicrophone: true,
   enableSpeakerphone: true,
@@ -57,10 +57,10 @@ export default function ChannelRoom(props) {
   let { roomid, frequency, socket } = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
 
-  let audioData;
-  let base64data = '';
-  let chunknum = 0;
-  let counter = 0;
+  // let audioData;
+  // let base64data = '';
+  // let chunknum = 0;
+  // let counter = 0;
   let mounted = false;
 
   LiveAudioStream.on('data', (data) => {
@@ -89,49 +89,43 @@ export default function ChannelRoom(props) {
       }
     });
 
-    socket.on('data_incoming', (data) => {
-      //const url = 'data:audio/x-wav;base64,' + "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + data; //URL.createObjectURL(blob.blob);
-      if (counter > 10) {
-        const path = RNFS.ExternalDirectoryPath + '/chunk_num' + chunknum + '.wav';
-        RNFS.writeFile(path, 'UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9' + base64data, 'base64')
-          .then((success) => {
-            try {
-              let sound = new Sound(path);
-              sound.play();
-            } catch (error) {
-              console.log(error.message);
-            }
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-        chunknum++;
-        counter = 0;
-      } else {
-        base64data = base64data + data;
-        counter++;
-      }
-    });
+    // socket.on('data_incoming', (data) => {
+    //   //const url = 'data:audio/x-wav;base64,' + "UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9" + data; //URL.createObjectURL(blob.blob);
+    //   if (counter > 10) {
+    //     const path = RNFS.ExternalDirectoryPath + '/chunk_num' + chunknum + '.wav';
+    //     RNFS.writeFile(path, 'UklGRiR9AABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQB9' + base64data, 'base64')
+    //       .then((success) => {
+    //         try {
+    //           let sound = new Sound(path);
+    //           sound.play();
+    //         } catch (error) {
+    //           console.log(error.message);
+    //         }
+    //       })
+    //       .catch((err) => {
+    //         console.log(err.message);
+    //       });
+    //     chunknum++;
+    //     counter = 0;
+    //   } else {
+    //     base64data = base64data + data;
+    //     counter++;
+    //   }
+    // });
 
     //AGORA
     let engine;
-    RtcEngine.create(state.appId).then(rtcEngine => {
-      engine = rtcEngine;
+    RtcEngine.create(agoraState.appId).then(rtcEngine => {
+      console.log('initializing rtc engine');
 
-      console.log(engine)
+      engine = rtcEngine;
       engine.enableAudio();
 
-      // engine.addListener('UserJoined', (uid, elapsed) => {
-      //   console.log('User joined', uid, elapsed)
-      // })
+      engine.joinChannel(agoraState.token, 'test_channel', null, 0);
+      //engine.joinChannel(agoraState.token, 'channel_' + roomid, null, 0);
 
-      // engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
-      //   console.log('JoinChannelSuccess', channel, uid, elapsed)
-      // })
-
-      engine.joinChannel(state.token, 'channel_' + roomid, null, 0);
-
-      engine.setEnableSpeakerphone(props.enableSpeakerphone)
+      engine.setEnableSpeakerphone(true)
+      engine.enableLocalAudio(true);
     })
 
 
@@ -140,17 +134,17 @@ export default function ChannelRoom(props) {
     const leaveRoom = () => {
       //LiveAudioStream.stop();
       socket.emit('leave_room', roomid);
+      engine.leaveChannel();
       joined = false;
+      
     };
 
     const send = () => {
-      //LiveAudioStream.start();
       socket.emit('set_talking_state', true);
       engine.enableLocalAudio(true);
     };
 
     const stopSending = () => {
-      //LiveAudioStream.stop();
       socket.emit('set_talking_state', false);
       engine.enableLocalAudio(false);
     };

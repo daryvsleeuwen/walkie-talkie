@@ -13,7 +13,7 @@ const headerOptions = {
   headerShown: false
 };
 
-let socket = io('http://192.168.178.43:8000');
+let socket = io('http://145.93.117.223:8000');
 
 export default function App() {
   return (
