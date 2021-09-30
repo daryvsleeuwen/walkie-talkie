@@ -7,8 +7,9 @@ import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 import RtcEngine from 'react-native-agora';
 
+let mounted = false;
+let init = false;
 let engine;
-let joined = false;
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token:
@@ -24,8 +25,6 @@ export default function ChannelRoom(props) {
   const {navigate} = props.navigation;
   let {roomid, frequency, socket} = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
-  let [joined, setJoined] = React.useState(false);
-  let [mounted, setMounted] = React.useState(false);
   const animatedButtonScale = React.useRef(new Animated.Value(1)).current;
   const animationSettings = {
     duration: 300,
@@ -33,36 +32,21 @@ export default function ChannelRoom(props) {
     useNativeDriver: true,
   };
 
-  useEffect(() =>{
-    setMounted(true);
+  useEffect(() => {
+    mounted = true;
 
-    return () =>{
-      setMounted(false);
-    }
+    return () => {
+      socket.emit('leave_room', roomid);
+
+      if (engine) {
+        engine.leaveChannel();
+      }
+
+      mounted = false;
+    };
   }, []);
 
-  let send = () => {};
-  let stopSending = () => {};
-
-  if (joined != true) {
-    socket.emit('join_room', roomid);
-    setJoined(true);
-
-    socket.on('update_joined_users', (joinedUsers) => {
-      if(mounted){
-        setJoinedUsers(joinedUsers);
-      }
-    });
-
-    send = () => {
-      socket.emit('set_talking_state', true);
-      engine.enableLocalAudio(true);
-    };
-
-    stopSending = () => {
-      socket.emit('set_talking_state', false);
-      engine.enableLocalAudio(false);
-    };
+  if (!init) {
     socket.on('token_receiving', (token) => {
       RtcEngine.create(agoraState.appId).then((rtcEngine) => {
         engine = rtcEngine;
@@ -72,26 +56,33 @@ export default function ChannelRoom(props) {
 
         engine.setEnableSpeakerphone(true);
         engine.enableLocalAudio(true);
-
-       
       });
     });
+
+    socket.on('update_joined_users', (joinedUsers) => {
+      // if(mounted){
+      setJoinedUsers(joinedUsers);
+      // }
+    });
+
+    socket.emit('join_room', roomid);
+    init = true;
   }
 
-  const leaveRoom = () => {
-    socket.emit('leave_room', roomid);
+  const send = () => {
+    socket.emit('set_talking_state', true);
+    engine.enableLocalAudio(true);
+  };
 
-    if (engine) {
-      engine.leaveChannel();
-    }
-
-    joined = false;
+  const stopSending = () => {
+    socket.emit('set_talking_state', false);
+    engine.enableLocalAudio(false);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.pageTitleBox}>
-        <BackNavigation navigate={navigate} onBack={leaveRoom}></BackNavigation>
+        <BackNavigation navigate={navigate}></BackNavigation>
         <Text style={styles.pageTitle}>Channel {frequency}</Text>
       </View>
 
