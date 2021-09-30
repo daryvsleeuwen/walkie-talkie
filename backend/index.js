@@ -62,12 +62,12 @@ function findClient(room, client, callback){
   }
 }
 
-function updateJoinedClients(room) {
-  let filtered = room.map((client) => {
+function updateJoinedClients(roomclients) {
+  let filtered = roomclients.map((client) => {
     return { id: client.socket.id, talking: client.talking };
   });
 
-  room.forEach((client) => {
+  roomclients.forEach((client) => {
     client.socket.emit('update_joined_users', filtered);
   });
 }
