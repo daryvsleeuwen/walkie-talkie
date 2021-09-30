@@ -17,7 +17,6 @@ let rooms = [
 ];
 
 io.on('connection', (client) => {
-  let index;
   let room;
 
   client.emit('get_frequencys',
@@ -28,7 +27,6 @@ io.on('connection', (client) => {
 
   client.on('join_room', (roomid) => {
     room = roomid;
-    index = rooms[room].clients.length;
 
     rooms[room].clients.push({ talking: false, socket: client });
     generateToken(client, roomid);
@@ -36,31 +34,33 @@ io.on('connection', (client) => {
   });
 
   client.on('leave_room', () => {
-    let clientIndex;
-
-    rooms[room].clients.forEach((cl, index) => {
-      if (cl.socket.id === client.id) {
-        clientIndex = index
-      }
+    findClient(room, client, (cl, i) =>{
+      rooms[room].clients.splice(i, 1);
     });
 
-    rooms[room].clients.splice(clientIndex, 1);
     updateJoinedClients(rooms[room].clients);
-  });
-
-  client.on('audio', (data) => {
-    rooms[room].forEach((cl) => {
-      if (cl.id == client.id) {
-        client.emit('audio_incoming', data.audiodata);
-      }
-    });
   });
 
   client.on('set_talking_state', (talking) => {
-    rooms[room].clients[index].talking = talking;
+    findClient(room, client, (cl) =>{
+      cl.talking = talking;
+    });
+
     updateJoinedClients(rooms[room].clients);
   });
 });
+
+function findClient(room, client, callback){
+  if(typeof room === 'number'){
+    rooms[room].clients.forEach((cl, index) => {
+      if (cl.socket.id === client.id) {
+        if(typeof callback === 'function'){
+          callback(cl, index);
+        }
+      }
+    });
+  }
+}
 
 function updateJoinedClients(room) {
   let filtered = room.map((client) => {
@@ -82,7 +82,6 @@ function generateToken(client, roomid, socket) {
   const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
 
   const channelName = 'channel_' + roomid;
-  console.log(channelName)
   const uid = client.id;
 
   const token = RtcTokenBuilder.buildTokenWithUid(appID, appCertificate, channelName, uid, role, privilegeExpiredTs);
