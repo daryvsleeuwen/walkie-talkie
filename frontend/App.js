@@ -1,11 +1,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import {io} from 'socket.io-client';
 import ChannelSelector from './pages/channel-selector';
 import ChannelRoom from './pages/channel-room';
-import Login from './pages/login';
 
 const Stack = createNativeStackNavigator();
 
