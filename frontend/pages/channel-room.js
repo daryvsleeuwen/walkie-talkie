@@ -1,19 +1,18 @@
 import React from 'react';
-import {useEffect, useRef} from 'react';
+import { useEffect } from 'react';
 import BackNavigation from '../components/back-navigator';
-import {Animated, PermissionsAndroid, StyleSheet, Text, View, Pressable, Easing} from 'react-native';
+import { Animated, StyleSheet, Text, View, Pressable, Easing } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
 import RtcEngine from 'react-native-agora';
 
-let mounted = false;
-let init = false;
 let engine;
+let joined = false;
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token:
-    '006973ff918e3064ce4ba5e71bac6d06267IAAaIX36emN+3tm2X4W2dOelpjKEPSGi+zSzI0N69fWcc49auH4AAAAAEADy5cWPAHRVYQEAAQAAdFVh',
+    '006973ff918e3064ce4ba5e71bac6d06267IAA/XzetnRRMMYDjQzculkCfz/DNLT7LfHZn5+2dhh0dddS2G+8AAAAAEADy5cWPOA9YYQEAAQA3D1hh',
   channelName: 'testing',
   openMicrophone: true,
   enableSpeakerphone: true,
@@ -22,9 +21,11 @@ let agoraState = {
 };
 
 export default function ChannelRoom(props) {
-  const {navigate} = props.navigation;
-  let {roomid, frequency, socket} = props.route.params;
+  const { navigate } = props.navigation;
+  let { roomid, frequency, socket } = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
+  let [joined, setJoined] = React.useState(false);
+  let [mounted, setMounted] = React.useState(false);
   const animatedButtonScale = React.useRef(new Animated.Value(1)).current;
   const animationSettings = {
     duration: 300,
@@ -33,56 +34,59 @@ export default function ChannelRoom(props) {
   };
 
   useEffect(() => {
-    mounted = true;
+    setMounted(true);
 
     return () => {
-      socket.emit('leave_room', roomid);
-
-      if (engine) {
-        engine.leaveChannel();
-      }
-
-      mounted = false;
-    };
+      setMounted(false);
+    }
   }, []);
 
-  if (!init) {
+  let send = () => {
+    socket.emit('set_talking_state', true);
+    engine.enableLocalAudio(true);
+  };
+  let stopSending = () => {
+    socket.emit('set_talking_state', false);
+    engine.enableLocalAudio(false);
+  };
+
+  socket.on('update_joined_users', (joinedUsers) => {
+    console.log(joinedUsers)
+    if (mounted) {
+      setJoinedUsers(joinedUsers);
+    }
+  });
+
+  if (!joined) {
+    socket.emit('join_room', roomid);
+    setJoined(true);
+
     socket.on('token_receiving', (token) => {
       RtcEngine.create(agoraState.appId).then((rtcEngine) => {
         engine = rtcEngine;
         engine.enableAudio();
-
-        engine.joinChannel(token, 'channel_' + roomid, null, 0);
+        engine.joinChannel(agoraState.token, 'channel_' + roomid, null, 0);
 
         engine.setEnableSpeakerphone(true);
-        engine.enableLocalAudio(true);
+        engine.enableLocalAudio(false);
       });
     });
-
-    socket.on('update_joined_users', (joinedUsers) => {
-      // if(mounted){
-      setJoinedUsers(joinedUsers);
-      // }
-    });
-
-    socket.emit('join_room', roomid);
-    init = true;
   }
 
-  const send = () => {
-    socket.emit('set_talking_state', true);
-    engine.enableLocalAudio(true);
-  };
+  const leaveRoom = () => {
+    console.log('leaving room ' + roomid)
+    socket.emit('leave_room', roomid);
 
-  const stopSending = () => {
-    socket.emit('set_talking_state', false);
-    engine.enableLocalAudio(false);
+    if (engine) {
+      engine.leaveChannel();
+    }
+    joined = false;
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.pageTitleBox}>
-        <BackNavigation navigate={navigate}></BackNavigation>
+        <BackNavigation navigate={navigate} onBack={leaveRoom}></BackNavigation>
         <Text style={styles.pageTitle}>Channel {frequency}</Text>
       </View>
 
@@ -96,16 +100,16 @@ export default function ChannelRoom(props) {
       </View>
 
       <View style={pageStyles.pushToTalkCenterer}>
-        <Animated.View style={[{transform: [{scale: animatedButtonScale}], position: 'relative'}, styles.fullCenter]}>
+        <Animated.View style={[{ transform: [{ scale: animatedButtonScale }], position: 'relative' }, styles.fullCenter]}>
           <View style={pageStyles.pushToTalkBackground}></View>
           <Pressable
             style={pageStyles.pushToTalkbutton}
             onPressIn={() => {
-              Animated.timing(animatedButtonScale, {...animationSettings, toValue: 0.8}).start();
+              Animated.timing(animatedButtonScale, { ...animationSettings, toValue: 0.8 }).start();
               send();
             }}
             onPressOut={() => {
-              Animated.timing(animatedButtonScale, {...animationSettings, toValue: 1}).start();
+              Animated.timing(animatedButtonScale, { ...animationSettings, toValue: 1 }).start();
               stopSending();
             }}>
             <View
