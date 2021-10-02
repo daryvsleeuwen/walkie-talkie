@@ -54,12 +54,6 @@ export default function ChannelRoom(props) {
     engine.enableLocalAudio(false);
   };
 
-  socket.on('update_joined_users', (joinedUsers) => {
-    if (mounted) {
-      setJoinedUsers(joinedUsers);
-    }
-  });
-
   if (!init) {
     socket.emit('join_room', roomid);
 
@@ -72,6 +66,12 @@ export default function ChannelRoom(props) {
         engine.setEnableSpeakerphone(true);
         engine.enableLocalAudio(false);
       });
+    });
+
+    socket.on('update_joined_users', (joinedUsers) => {
+      if (mounted) {
+        setJoinedUsers(joinedUsers);
+      }
     });
   }
 
