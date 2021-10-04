@@ -13,7 +13,7 @@ let init = false;
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token:
-    '006973ff918e3064ce4ba5e71bac6d06267IAA/XzetnRRMMYDjQzculkCfz/DNLT7LfHZn5+2dhh0dddS2G+8AAAAAEADy5cWPOA9YYQEAAQA3D1hh',
+    '006973ff918e3064ce4ba5e71bac6d06267IADLEFL7GJE29u/ezjGjYY5SLx4wNbyUvOjMvVCjYNxjTdS2G+8AAAAAEADy5cWPWwBcYQEAAQBbAFxh',  
   channelName: 'testing',
   openMicrophone: true,
   enableSpeakerphone: true,
