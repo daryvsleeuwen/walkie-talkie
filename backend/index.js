@@ -32,8 +32,6 @@ io.on('connection', (client) => {
     rooms[room].clients.push({ talking: false, socket: client });
     generateToken(client, roomid);
     updateJoinedClients(rooms[room].clients, client);
-
-    console.log(rooms[room].clients);
   });
 
   client.on('leave_room', () => {
@@ -53,6 +51,7 @@ io.on('connection', (client) => {
   });
 });
 
+
 function findClient(room, client, callback){
   if(typeof room === 'number'){
     rooms[room].clients.forEach((cl, index) => {
@@ -67,7 +66,7 @@ function findClient(room, client, callback){
 
 function updateJoinedClients(roomclients, self) {
   let filtered = roomclients.map((client) => {
-    if(client.id !== self.id){
+    if(client.id != self.id){
       return { id: client.socket.id, talking: client.talking };
     }
   });

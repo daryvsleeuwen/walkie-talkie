@@ -1,7 +1,7 @@
 import React from 'react';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import BackNavigation from '../components/back-navigator';
-import {Animated, StyleSheet, Text, View, Pressable, Easing} from 'react-native';
+import { Animated, StyleSheet, Text, View, Pressable, Easing } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import JoinedUser from '../components/joined-user';
 import styles from '../styles/misc';
@@ -13,7 +13,7 @@ let init = false;
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token:
-    '006973ff918e3064ce4ba5e71bac6d06267IADLEFL7GJE29u/ezjGjYY5SLx4wNbyUvOjMvVCjYNxjTdS2G+8AAAAAEADy5cWPWwBcYQEAAQBbAFxh',  
+    '006973ff918e3064ce4ba5e71bac6d06267IADLEFL7GJE29u/ezjGjYY5SLx4wNbyUvOjMvVCjYNxjTdS2G+8AAAAAEADy5cWPWwBcYQEAAQBbAFxh',
   channelName: 'testing',
   openMicrophone: true,
   enableSpeakerphone: true,
@@ -22,8 +22,8 @@ let agoraState = {
 };
 
 export default function ChannelRoom(props) {
-  const {navigate} = props.navigation;
-  let {roomid, frequency, socket} = props.route.params;
+  const { navigate } = props.navigation;
+  let { roomid, frequency, socket } = props.route.params;
   let [joinedUsers, setJoinedUsers] = React.useState([]);
   const animatedButtonScale = React.useRef(new Animated.Value(1)).current;
   const animationSettings = {
@@ -38,7 +38,7 @@ export default function ChannelRoom(props) {
     return () => {
       mounted = false;
       socket.emit('leave_room', roomid);
-
+      init = false;
       if (engine) {
         engine.leaveChannel();
       }
@@ -54,9 +54,16 @@ export default function ChannelRoom(props) {
     engine.enableLocalAudio(false);
   };
 
+  socket.on('update_joined_users', (joinedUsers) => {
+    
+      setJoinedUsers(joinedUsers);
+      console.log(joinedUsers);
+    
+  });
+
   if (!init) {
     socket.emit('join_room', roomid);
-
+    init = true;
     socket.on('token_receiving', () => {
       RtcEngine.create(agoraState.appId).then((rtcEngine) => {
         engine = rtcEngine;
@@ -66,12 +73,6 @@ export default function ChannelRoom(props) {
         engine.setEnableSpeakerphone(true);
         engine.enableLocalAudio(false);
       });
-    });
-
-    socket.on('update_joined_users', (joinedUsers) => {
-      if (mounted) {
-        setJoinedUsers(joinedUsers);
-      }
     });
   }
 
@@ -85,23 +86,22 @@ export default function ChannelRoom(props) {
       {/* Display all clients in channel */}
       <View style={styles.pageContent}>
         {joinedUsers.map((user, index) => {
-          if (user.id !== socket.id) {
+          if (user.id != socket.id)
             return <JoinedUser key={index} userName={user.id} talking={user.talking}></JoinedUser>;
-          }
         })}
       </View>
 
       <View style={pageStyles.pushToTalkCenterer}>
-        <Animated.View style={[{transform: [{scale: animatedButtonScale}], position: 'relative'}, styles.fullCenter]}>
+        <Animated.View style={[{ transform: [{ scale: animatedButtonScale }], position: 'relative' }, styles.fullCenter]}>
           <View style={pageStyles.pushToTalkBackground}></View>
           <Pressable
             style={pageStyles.pushToTalkbutton}
             onPressIn={() => {
-              Animated.timing(animatedButtonScale, {...animationSettings, toValue: 0.8}).start();
+              Animated.timing(animatedButtonScale, { ...animationSettings, toValue: 0.8 }).start();
               send();
             }}
             onPressOut={() => {
-              Animated.timing(animatedButtonScale, {...animationSettings, toValue: 1}).start();
+              Animated.timing(animatedButtonScale, { ...animationSettings, toValue: 1 }).start();
               stopSending();
             }}>
             <View
