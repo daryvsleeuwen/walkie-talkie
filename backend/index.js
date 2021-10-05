@@ -4,6 +4,7 @@ const {
   RtcRole,
   RtmRole,
 } = require("agora-access-token");
+require('dotenv').config();
 const server = require("http").createServer();
 const io = require("socket.io")(server, {
   cors: {
@@ -103,4 +104,4 @@ function generateToken(client, roomid, socket) {
   client.emit("token_receiving", token);
 }
 
-server.listen(5000);
+server.listen(process.env.PORT || 5000);
