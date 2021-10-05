@@ -11,7 +11,7 @@ const headerOptions = {
   headerShown: false
 }
 
-let socket = io("http://145.93.141.57:5000");
+let socket = io("https://walkietalkie-backend.herokuapp.com");
 
 export default function App() {
   return (
