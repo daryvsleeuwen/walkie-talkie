@@ -55,17 +55,15 @@ export default function ChannelRoom(props) {
   };
 
   socket.on('update_joined_users', (joinedUsers) => {
-    
+    if(mounted){
       setJoinedUsers(joinedUsers);
-      console.log(joinedUsers);
-    
+    }
   });
 
   if (!init) {
     socket.emit('join_room', roomid);
     init = true;
     socket.on('token_receiving', () => {
-      console.log('settting up rtc engine')
       RtcEngine.create(agoraState.appId).then((rtcEngine) => {
         engine = rtcEngine;
         engine.enableAudio();

@@ -32,7 +32,6 @@ io.on("connection", (client) => {
   );
 
   client.on("join_room", (roomid) => {
-    console.log("user joined room");
     room = roomid;
 
     rooms[room].clients.push({ talking: false, socket: client });
@@ -43,8 +42,6 @@ io.on("connection", (client) => {
   client.on("leave_room", () => {
     const index = findClient(room, client.id);
     rooms[room].clients.splice(index, 1);
-    
-    console.log(rooms[room]);
     updateJoinedClients(rooms[room].clients, client);
   });
 
@@ -106,4 +103,4 @@ function generateToken(client, roomid, socket) {
   client.emit("token_receiving", token);
 }
 
-server.listen(8000);
+server.listen(5000);
