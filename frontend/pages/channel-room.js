@@ -13,7 +13,7 @@ let init = false;
 let agoraState = {
   appId: `973ff918e3064ce4ba5e71bac6d06267`,
   token:
-    '006973ff918e3064ce4ba5e71bac6d06267IADLEFL7GJE29u/ezjGjYY5SLx4wNbyUvOjMvVCjYNxjTdS2G+8AAAAAEADy5cWPWwBcYQEAAQBbAFxh',
+    '006973ff918e3064ce4ba5e71bac6d06267IACJuwxfEWMJYcGYxNP++hu4FR7axMevDj+frbOcyvS6iNS2G+8AAAAAEADy5cWP1FVdYQEAAQDUVV1h',
   channelName: 'testing',
   openMicrophone: true,
   enableSpeakerphone: true,
@@ -65,6 +65,7 @@ export default function ChannelRoom(props) {
     socket.emit('join_room', roomid);
     init = true;
     socket.on('token_receiving', () => {
+      console.log('settting up rtc engine')
       RtcEngine.create(agoraState.appId).then((rtcEngine) => {
         engine = rtcEngine;
         engine.enableAudio();
